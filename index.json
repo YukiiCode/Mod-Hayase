@@ -1,0 +1,15 @@
+[
+  {
+    "name": "AnimeFLV (Español)",
+    "package": "anime.flv.es",
+    "version": "v1.0.0",
+    "author": "Mod-Hayase Developer",
+    "lang": "es",
+    "license": "MIT",
+    "icon": "https://animeflv.net/favicon.ico",
+    "type": "bangumi",
+    "url": "animeflv.js",
+    "webSite": "https://www3.animeflv.net",
+    "description": "Gran extensión de AnimeFLV para Hayase, optimizada para hispanohablantes con selección de servidor preferido."
+  }
+]
