@@ -1,18 +1,20 @@
-{
-  "name": "AnimeFLV (Español)",
-  "id": "anime.flv.es",
-  "package": "anime.flv.es",
-  "version": "v1.0.1",
-  "author": "Mod-Hayase Developer",
-  "lang": "es",
-  "languages": ["es"],
-  "license": "MIT",
-  "icon": "https://animeflv.net/favicon.ico",
-  "type": "bangumi",
-  "media": "sub",
-  "url": "https://raw.githubusercontent.com/YukiiCode/Mod-Hayase/main/animeflv.js",
-  "code": "https://raw.githubusercontent.com/YukiiCode/Mod-Hayase/main/animeflv.js",
-  "webSite": "https://www3.animeflv.net",
-  "update": "https://raw.githubusercontent.com/YukiiCode/Mod-Hayase/main/manifest.json",
-  "description": "Gran extensión de AnimeFLV para Hayase, optimizada para hispanohablantes con selección de servidor preferido."
-}
+[
+  {
+    "name": "AnimeFLV (Español)",
+    "id": "anime.flv.es",
+    "package": "anime.flv.es",
+    "version": "v1.0.1",
+    "author": "Mod-Hayase Developer",
+    "lang": "es",
+    "languages": ["es"],
+    "license": "MIT",
+    "icon": "https://animeflv.net/favicon.ico",
+    "type": "bangumi",
+    "media": "sub",
+    "url": "https://raw.githubusercontent.com/YukiiCode/Mod-Hayase/main/animeflv.js",
+    "code": "https://raw.githubusercontent.com/YukiiCode/Mod-Hayase/main/animeflv.js",
+    "webSite": "https://www3.animeflv.net",
+    "update": "https://raw.githubusercontent.com/YukiiCode/Mod-Hayase/main/manifest.json",
+    "description": "Gran extensión de AnimeFLV para Hayase, optimizada para hispanohablantes con selección de servidor preferido."
+  }
+]
