@@ -1,6 +1,6 @@
 // ==MiruExtension==
 // @name         AnimeFLV (Español)
-// @version      v1.0.0
+// @version      v1.0.1
 // @author       Mod-Hayase Developer
 // @lang         es
 // @license      MIT
@@ -12,6 +12,14 @@
 // ==/MiruExtension==
 
 export default class extends Extension {
+  // Helper to safely extract HTML string from request response
+  getHtml(res) {
+    if (typeof res === "string") return res;
+    if (res && typeof res.data === "string") return res.data;
+    if (res && typeof res.text === "string") return res.text;
+    return "";
+  }
+
   async req(url) {
     const baseUrl = await this.getSetting("animeflv_url");
     return this.request(url, {
@@ -29,12 +37,12 @@ export default class extends Extension {
       type: "select",
       description: "El servidor de video preferido para reproducir",
       defaultValue: "mega",
-      options: [
-        { label: "MEGA", value: "mega" },
-        { label: "Streamwish", value: "sw" },
-        { label: "Streamtape", value: "stape" },
-        { label: "Okru", value: "okru" }
-      ]
+      options: {
+        "mega": "MEGA",
+        "sw": "Streamwish",
+        "stape": "Streamtape",
+        "okru": "Okru"
+      }
     });
 
     this.registerSetting({
@@ -51,7 +59,7 @@ export default class extends Extension {
       return [];
     }
     const res = await this.req('/');
-    const html = res.data;
+    const html = this.getHtml(res);
     const baseUrl = await this.getSetting("animeflv_url");
 
     const pattern = /<li class="Episode">[\s\S]*?<a href="([^"]+)">[\s\S]*?<img src="([^"]+)" alt="([^"]+)"[\s\S]*?<span class="Capi">([^<]+)<\/span>[\s\S]*?<strong class="Title">([^<]+)<\/strong>/g;
@@ -72,7 +80,7 @@ export default class extends Extension {
   async search(kw, page) {
     const encodeKw = encodeURIComponent(kw);
     const res = await this.req(`/browse?q=${encodeKw}&page=${page}`);
-    const html = res.data;
+    const html = this.getHtml(res);
     const baseUrl = await this.getSetting("animeflv_url");
 
     const pattern = /<div class="Anime[^"]*">[\s\S]*?<img src="([^"]+)"[^>]*>[\s\S]*?<a class="Button Vrn" href="([^"]+)">Ver Anime<\/a>[\s\S]*?<h3 class="Title">([^<]+)<\/h3>/g;
@@ -92,7 +100,7 @@ export default class extends Extension {
 
   async detail(url) {
     const res = await this.req(url);
-    const html = res.data;
+    const html = this.getHtml(res);
     const baseUrl = await this.getSetting("animeflv_url");
 
     const titleMatch = html.match(/<h1 class="Title">([^<]+)<\/h1>/) || html.match(/<meta property="og:title" content="([^"]+)"/);
@@ -140,7 +148,7 @@ export default class extends Extension {
 
   async watch(url) {
     const res = await this.req(url);
-    const html = res.data;
+    const html = this.getHtml(res);
 
     const videoMatch = html.match(/var videos\s*=\s*(\{.*?\});/);
     if (!videoMatch) {
@@ -188,9 +196,28 @@ export default class extends Extension {
       type = "hls";
     }
 
-    return {
-      type: type,
-      url: embedUrl
-    };
+    // Modern defensive hybrid return format to support all Hayase/Miru variants:
+    // 1. Array format (if iterating directly)
+    // 2. Object with results array format (if iterating over results)
+    // 3. Single object in root format (if reading url/type directly)
+    const hybridResult = [
+      {
+        name: chosen.title || chosen.server || "Reproductor",
+        url: embedUrl,
+        type: type
+      }
+    ];
+
+    hybridResult.type = type;
+    hybridResult.url = embedUrl;
+    hybridResult.results = [
+      {
+        name: chosen.title || chosen.server || "Reproductor",
+        url: embedUrl,
+        type: type
+      }
+    ];
+
+    return hybridResult;
   }
 }
